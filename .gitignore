@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.DS_Store
+.star-letter/
+star-letter.mock.*
+!docs/star-letter.mock.example.js
+artifacts/private/
+*.log
+.env*
+!.env.example

@@ -1,0 +1,19 @@
+{
+  "name": "unsent-us",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "未发送的我们：中文旧手机调查与友情叙事游戏",
+  "scripts": {
+    "dev": "node scripts/serve.js",
+    "test": "node --test tests/*.test.js",
+    "build": "node scripts/build.js",
+    "check": "node scripts/check.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  }
+}

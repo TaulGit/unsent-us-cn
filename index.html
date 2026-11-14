@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#10282b" />
+    <meta
+      name="description"
+      content="一部旧手机，一场迟了七年的重逢。中文原创友情调查叙事游戏。"
+    />
+    <title>未发送的我们 · 旧手机里的重逢</title>
+    <link rel="icon" type="image/webp" href="./assets/portrait-zhixia.webp" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preload" as="image" href="./assets/cover.webp" />
+    <script
+      defer
+      src="https://gz-vchar-pub.nosdn.127.net/star-letter/game-sdk/v2/sdk.iife.js"
+    ></script>
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="initial-loading">
+        <span class="small-caps">UNSENT, BUT NOT FORGOTTEN</span>
+        <p>正在唤醒旧手机</p>
+        <span class="loading-rule"></span>
+      </div>
+    </div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="modal" aria-label="详情"></dialog>
+    <noscript>请开启 JavaScript，才能查阅这部旧手机中的故事。</noscript>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "gameId": 10588,
+  "title": "未发送的我们",
+  "tags": [
+    "友情",
+    "旧手机解谜",
+    "互动叙事",
+    "多结局",
+    "中文原创"
+  ],
+  "gameCategory": [
+    10001,
+    10002
+  ],
+  "summary": "一部旧手机，一场迟了七年的重逢。翻阅聊天、照片、账单与草稿，拼出好友决裂的经过，决定如何再次开口。五章调查、四道推理、三种结局。",
+  "cover": "./assets/cover.webp",
+  "gameFile": "./dist",
+  "gameType": 0,
+  "screen": 0,
+  "priceType": 0,
+  "visibility": 1,
+  "capabilityDeclaration": {
+    "schemaVersion": 1,
+    "capabilities": {
+      "storage": {
+        "enabled": true
+      },
+      "exchange": {
+        "enabled": true
+      },
+      "ai": {
+        "enabled": false
+      },
+      "oss": {
+        "enabled": false
+      }
+    }
+  },
+  "description": "你是周遥。七年没有联系的好友沈知夏寄回一部旧手机。通过聊天、相册、备忘录和账单，找回20条回忆，解开四道跨应用推理，最后完成六轮重逢对话。可以重联、保留距离，或者认真告别。全部剧情免费；自愿观看广告可额外获得一次线索提示。",
+  "controls": "鼠标或触屏点击。查阅记录并收入线索册，在推理应用完成本章调查。排序题按时间顺序点选；密码题可键盘输入。顶部保存可继续进度。"
+}
