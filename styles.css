@@ -2078,3 +2078,46 @@ h3,
     scroll-behavior: auto !important;
   }
 }
+
+/* Portrait mobile: native swipe pages keep vertical reading gestures intact. */
+.swipe-tabs { display: none; }
+@media (max-width: 680px) {
+  .workspace { height: 100dvh; min-height: 0; overflow: hidden; padding-top: env(safe-area-inset-top); }
+  .workspace .game-header { height: 58px; flex: 0 0 58px; }
+  .swipe-tabs { display: flex; flex: 0 0 46px; padding: 3px 18px 7px; gap: 8px; border-bottom: 1px solid var(--line); }
+  .swipe-tabs button { flex: 1; min-height: 36px; font-size: 12px; letter-spacing: 2px; color: #9fb5aa; border-bottom: 2px solid transparent; }
+  .swipe-tabs button[aria-pressed="true"] { color: var(--gold); border-bottom-color: var(--gold); background: #d4b1840b; }
+  .workspace .work-grid { display: flex; flex-direction: row; align-items: stretch; gap: 0; margin: 0; padding: 0; width: 100%; max-width: none; flex: 1 1 0; min-height: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .workspace .work-grid::-webkit-scrollbar { display: none; }
+  .workspace .work-grid > * { flex: 0 0 100%; width: 100%; min-width: 0; max-width: none; scroll-snap-align: start; scroll-snap-stop: always; }
+  .workspace .chapter-panel { display: flex; flex-direction: column; align-items: stretch; padding: 26px 26px 22px; overflow-y: auto; gap: 0; }
+  .workspace .chapter-panel h1 { font-size: 29px; margin: 13px 0 19px; }
+  .workspace .chapter-summary, .workspace .chapter-label, .workspace .how-to, .workspace .current-task { display: block; max-width: none; }
+  .workspace .chapter-summary { font-size: 14px; line-height: 2; }
+  .workspace .chapter-timeline { margin: 22px 0 17px; }
+  .workspace .current-task { margin-top: 30px; }
+  .workspace .current-task p { font-size: 14px; }
+  .workspace .how-to { font-size: 12px; padding-top: 30px; }
+  .workspace .mobile-nav { display: none; }
+  .workspace .phone { height: 100%; min-height: 0; max-height: none; border-radius: 0; padding: 0; background: none; box-shadow: none; }
+  .workspace .phone-display { border-radius: 0; }
+  .workspace .phone-home { padding: 18px 25px 20px; }
+  .workspace .phone-bottom { height: 20px; }
+  .workspace .casebook-panel { display: flex; flex-direction: column; padding: 23px 24px 18px; overflow-y: auto; }
+  .workspace .casebook-header h2 { font-size: 23px; }
+  .workspace .evidence-list { max-height: none; flex: 1 0 auto; overflow: visible; padding-right: 0; }
+  .workspace .evidence-card { padding: 16px 0; }
+  .workspace .evidence-card strong { font-size: 14px; }
+  .workspace .evidence-card p { font-size: 12px; -webkit-line-clamp: 3; }
+  .workspace .hint-panel { flex-shrink: 0; padding-top: 25px; }
+  .workspace .hint-panel p { font-size: 12px; }
+  .workspace .hint-buttons button { min-height: 44px; font-size: 12px; }
+  .workspace-footer { flex: 0 0 auto; min-height: 29px; padding: 7px 15px max(8px, env(safe-area-inset-bottom)); font-size: 9px; }
+  .workspace-footer:before { content: '← 左右滑动切页 →'; color: #b8b596; }
+  .workspace-footer > span:first-child { display: none; }
+  .workspace .bubble, .workspace .note-text, .workspace .receipt .detail { font-size: 14px; }
+  .workspace .thread-row, .workspace .transaction-row, .workspace .note-row { min-height: 62px; }
+  .workspace .phone-app-header { min-height: 58px; }
+  .workspace .back-button { min-height: 36px; }
+  .modal { max-height: calc(100dvh - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+}

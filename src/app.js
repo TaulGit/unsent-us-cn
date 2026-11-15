@@ -88,6 +88,7 @@ let saveTimer,
   readable = false,
   initialized = false;
 let lastFocus = null;
+let mobilePage = 1;
 
 function toast(text) {
   const el = document.querySelector("#toast");
@@ -343,7 +344,7 @@ function renderPhone() {
   return `<section class="phone" aria-label="沈知夏的旧手机"><div class="phone-display"><div class="statusbar"><time>16:20</time><span class="speaker" aria-hidden="true"></span><span class="status-signal">${ui.app === "home" ? "旧记录已恢复" : "青岚"} · 84%</span></div>${ui.app === "home" ? "" : appHeader()}<div class="app-body" id="phone-body" tabindex="-1">${content}</div><button class="phone-bottom" data-action="home" aria-label="回到手机桌面"><span class="home-indicator"></span></button></div></section>`;
 }
 function renderWorkspace() {
-  return `<main class="workspace">${header()}<div class="work-grid">${renderChapter()}${renderPhone()}${renderCasebook()}</div><footer class="workspace-footer"><span>2019 / 那些没有说完的话</span><span>${state.finale ? '<button class="text-button" data-action="resume-story">回到重逢 →</button>' : "先看见事实，再决定如何开口。"}</span></footer></main>`;
+  return `<main class="workspace">${header()}<nav class="swipe-tabs" aria-label="手机页面">${["章节", "旧手机", "线索册"].map((name,index)=>`<button data-action="swipe-page" data-id="${index}" aria-pressed="${index===mobilePage}">${name}</button>`).join("")}</nav><div class="work-grid" aria-label="左右滑动切换章节、旧手机与线索册">${renderChapter()}${renderPhone()}${renderCasebook()}</div><footer class="workspace-footer"><span>2019 / 那些没有说完的话</span><span>${state.finale ? '<button class="text-button" data-action="resume-story">回到重逢 →</button>' : "先看见事实，再决定如何开口。"}</span></footer></main>`;
 }
 function renderFinale() {
   const round = FINALE.rounds[state.dialogueIndex];
@@ -374,9 +375,18 @@ function render({ preserveScroll = true } = {}) {
   if (preserveScroll && document.querySelector("#phone-body"))
     document.querySelector("#phone-body").scrollTop = scroll;
   updateStatus(status);
+  const pager = document.querySelector('.work-grid');
+  if (pager && matchMedia('(max-width: 680px)').matches) {
+    pager.scrollLeft = mobilePage * pager.clientWidth;
+    pager.addEventListener('scroll', () => {
+      mobilePage = Math.max(0, Math.min(2, Math.round(pager.scrollLeft / pager.clientWidth)));
+      document.querySelectorAll('[data-action="swipe-page"]').forEach((button,index)=>button.setAttribute('aria-pressed',String(index===mobilePage)));
+    }, {passive:true});
+  }
 }
 
 function openApp(id) {
+  mobilePage = 1;
   stopRecording();
   ui.app = id;
   ui.item = null;
@@ -455,6 +465,7 @@ function useHint() {
   );
 }
 function goToClue(id) {
+  mobilePage = 1;
   let item = PHOTOS.find((p) => p.clueId === id);
   if (item) {
     openApp("photos");
@@ -565,6 +576,12 @@ document.addEventListener("click", async (event) => {
     id = button.dataset.id;
   if (status.adBusy || status.paused) return;
   if (action !== "sound") void unlockSound();
+  if (action === "swipe-page") {
+    mobilePage = Number(id);
+    const pager = document.querySelector('.work-grid');
+    pager?.scrollTo({left:mobilePage*pager.clientWidth,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    return;
+  }
   if (action === "close") {
     closeModal();
     return;
