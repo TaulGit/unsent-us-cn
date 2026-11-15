@@ -38,6 +38,8 @@ import {
   chime,
   playArchive,
   stopArchive,
+  setMusicScene,
+  unlockSound,
 } from "./audio.js";
 
 const root = document.querySelector("#app"),
@@ -357,6 +359,7 @@ function renderEnding() {
   return `<main class="ending-screen">${img(e.asset, e.title, "ending-art")}${header()}<article class="ending-content"><span class="ending-number">END ${String(index).padStart(2, "0")} / 03 · 我们决定的以后</span><h1>${esc(e.title)}</h1><p class="ending-subtitle">${esc(e.subtitle)}</p><div class="ending-story">${esc(e.text)}</div><div class="ending-actions"><button class="primary" data-action="ending-letter">读一封后来的信</button><button class="secondary" data-action="review">回看这段往事</button><button class="secondary" data-action="replay-dialogue">再说一次</button></div><p class="quiet" style="margin-top:25px">${esc(GAME.closing)}</p></article></main>`;
 }
 function render({ preserveScroll = true } = {}) {
+  setMusicScene(ui.screen === "ending" ? "ending" : ui.screen === "finale" ? "reunion" : "investigation");
   const old = document.querySelector("#phone-body");
   const scroll = old?.scrollTop || 0;
   root.innerHTML =
@@ -522,13 +525,13 @@ function stopRecording() {
 function settings() {
   showModal(
     "阅读与声音",
-    `<h3>按自己的节奏读完</h3><p>重要选择与线索会自动保存。你也可以随时点击顶部“保存”。</p><div class="button-row"><button class="secondary" data-action="sound">环境音：${isSoundEnabled() ? "已开启" : "已关闭"}</button><button class="secondary" data-action="readable">字号：${readable ? "放大" : "标准"}</button></div><p class="quiet">${esc(status.message)}</p><button class="text-button" style="color:#788b70" data-action="retry">重新连接存档</button><p class="quiet">声音为原创雨声与简短钢琴氛围，可随时关闭。</p>`,
+    `<h3>按自己的节奏读完</h3><p>重要选择与线索会自动保存。你也可以随时点击顶部“保存”。</p><div class="button-row"><button class="secondary" data-action="sound">声音：${isSoundEnabled() ? "已开启" : "已关闭"}</button><button class="secondary" data-action="readable">字号：${readable ? "放大" : "标准"}</button></div><p class="quiet">${esc(status.message)}</p><button class="text-button" style="color:#788b70" data-action="retry">重新连接存档</button><p class="quiet">配乐随调查、重逢与结局切换，可随时关闭。雨声只在“声音”应用中试听。</p>`,
   );
 }
 function credits() {
   showModal(
     "关于这部作品",
-    `<span class="small-caps">MESSAGES WE NEVER SENT</span><h3>未发送的我们</h3><p>一部关于友情、误会与重新开口的中文原创互动故事。以旧手机调查和聊天叙事为灵感，角色、剧情、对白与美术均为本作创作。</p><p>5 章调查 · 20 条关键回忆 · 4 道推理<br>6 轮重逢对话 · 3 种关系的去向</p><p class="quiet">美术：AI 生成的电影胶片风格图片<br>声音：原创程序生成环境声与简短配乐<br>主线及全部结局免费，广告仅增加可选提示。</p><div class="button-row"><button class="secondary" data-action="settings">阅读与声音</button><button class="secondary" data-action="help">怎样游玩</button></div>`,
+    `<span class="small-caps">MESSAGES WE NEVER SENT</span><h3>未发送的我们</h3><p>一部关于友情、误会与重新开口的中文原创互动故事。以旧手机调查和聊天叙事为灵感，角色、剧情、对白与美术均为本作创作。</p><p>5 章调查 · 20 条关键回忆 · 4 道推理<br>6 轮重逢对话 · 3 种关系的去向</p><p class="quiet">美术：AI 生成的电影胶片风格图片<br>配乐：Stable Audio 生成的三首主题曲<br>音效：独立雨声与交互提示音<br>主线及全部结局免费，广告仅增加可选提示。</p><div class="button-row"><button class="secondary" data-action="settings">阅读与声音</button><button class="secondary" data-action="help">怎样游玩</button></div>`,
   );
 }
 function help() {
@@ -561,6 +564,7 @@ document.addEventListener("click", async (event) => {
   const action = button.dataset.action,
     id = button.dataset.id;
   if (status.adBusy || status.paused) return;
+  if (action !== "sound") void unlockSound();
   if (action === "close") {
     closeModal();
     return;

@@ -204,7 +204,7 @@ export function createPlatformBridge({ getWindow = () => globalThis.window, now 
           saveMeta: {
             label: snapshot.ending ? '未发送的我们 · 已抵达结局' : `未发送的我们 · 第 ${Number(snapshot.chapter || 0) + 1} 章`,
             progress: `${snapshot.clues?.length || 0} 条回忆`,
-            gameVersion: '1.0.0', playedTime: Math.max(0, now() - Number(snapshot.createdAt || now())),
+            gameVersion: '1.1.0', playedTime: Math.max(0, now() - Number(snapshot.createdAt || now())),
           },
         });
         if (!response?.ok || (response.outcome && response.outcome !== 'written')) {

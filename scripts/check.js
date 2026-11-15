@@ -14,6 +14,7 @@ import {
   FINALE,
   ENDINGS,
 } from "../src/story.js";
+import { MUSIC_TRACKS } from "../src/music.js";
 const base = fileURLToPath(new URL("..", import.meta.url));
 const exists = async (p) => {
   try {
@@ -51,7 +52,7 @@ for (const chapter of CHAPTERS) {
 }
 assert.equal(FINALE.rounds.length, 6);
 for (const r of FINALE.rounds) assert.equal(r.choices.length, 3);
-const assets = await readdir(path.join(base, "assets"));
+const assets = (await readdir(path.join(base, "assets"))).filter((file) => file.endsWith('.webp'));
 assert.equal(assets.length, 13, "expected 13 finished raster assets");
 let total = 0;
 for (const file of assets) {
@@ -64,11 +65,20 @@ for (const file of assets) {
 }
 for (const item of [...PHOTOS, ...Object.values(ENDINGS)])
   assert(await exists(item.asset), `missing art ${item.asset}`);
+let musicBytes = 0;
+for (const track of Object.values(MUSIC_TRACKS)) {
+  assert(await exists(track.file), `missing music ${track.file}`);
+  const content = await readFile(path.join(base, track.file));
+  assert.equal(content.subarray(4, 8).toString('ascii'), 'ftyp', `invalid M4A ${track.file}`);
+  assert(content.includes(Buffer.from('mp4a')), `missing AAC stream ${track.file}`);
+  musicBytes += content.length;
+}
 for (const file of [
   "index.html",
   "styles.css",
   "src/app.js",
   "src/audio.js",
+  "src/music.js",
   "src/platform.js",
   "src/engine.js",
   "src/story.js",
@@ -87,5 +97,5 @@ for (const file of [
     );
 }
 console.log(
-  `Verified ${CHAPTERS.length} chapters, ${CLUES.length} reachable clues, ${PUZZLES.length} puzzles, ${THREADS.reduce((n, t) => n + t.messages.length, 0)} messages, 3 endings; 13 WebP assets (${(total / 1024 / 1024).toFixed(2)} MiB).`,
+  `Verified ${CHAPTERS.length} chapters, ${CLUES.length} reachable clues, ${PUZZLES.length} puzzles, ${THREADS.reduce((n, t) => n + t.messages.length, 0)} messages, 3 endings; 13 WebP assets (${(total / 1024 / 1024).toFixed(2)} MiB), 3 AAC tracks (${(musicBytes / 1024 / 1024).toFixed(2)} MiB).`,
 );

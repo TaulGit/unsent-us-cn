@@ -13,6 +13,7 @@ const mime = {
   ".jpg": "image/jpeg",
   ".wav": "audio/wav",
   ".mp3": "audio/mpeg",
+  ".m4a": "audio/mp4",
   ".woff2": "font/woff2",
 };
 http
@@ -37,12 +38,34 @@ http
         res.writeHead(404).end("Not found");
         return;
       }
-      res.writeHead(200, {
+      const headers = {
         "Content-Type":
           mime[path.extname(target)] || "application/octet-stream",
         "Cache-Control": "no-cache",
-      });
-      fs.createReadStream(target).pipe(res);
+        "Accept-Ranges": "bytes",
+      };
+      const range = req.headers.range;
+      if (range) {
+        const match = /^bytes=(\d*)-(\d*)$/.exec(range);
+        let start = match?.[1] ? Number(match[1]) : 0;
+        let end = match?.[2] ? Number(match[2]) : stat.size - 1;
+        if (match && !match[1] && match[2]) {
+          start = Math.max(0, stat.size - end);
+          end = stat.size - 1;
+        }
+        end = Math.min(end, stat.size - 1);
+        if (!match || !Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start > end || start >= stat.size) {
+          res.writeHead(416, { ...headers, 'Content-Range': `bytes */${stat.size}` }).end();
+          return;
+        }
+        res.writeHead(206, { ...headers, 'Content-Range': `bytes ${start}-${end}/${stat.size}`, 'Content-Length': end - start + 1 });
+        if (req.method === 'HEAD') res.end();
+        else fs.createReadStream(target, { start, end }).pipe(res);
+      } else {
+        res.writeHead(200, { ...headers, 'Content-Length': stat.size });
+        if (req.method === 'HEAD') res.end();
+        else fs.createReadStream(target).pipe(res);
+      }
     });
   })
   .listen(port, "127.0.0.1", () =>

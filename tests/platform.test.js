@@ -105,7 +105,7 @@ test('cloud saves use one private key, serialize writes and retain the latest co
   assert.deepEqual(result, [true, true]);
   assert.equal(h.getStored().progress.chapter, 2);
   assert.equal(new Set(writes.map((entry) => entry.key)).size, 1);
-  assert.ok(writes.every((entry) => entry.scope === 'user' && entry.saveMeta.gameVersion === '1.0.0'));
+  assert.ok(writes.every((entry) => entry.scope === 'user' && entry.saveMeta.gameVersion === '1.1.0'));
   assert.equal(h.counts().localAccesses, 0);
 });
 
